@@ -24,12 +24,12 @@ function read_file(path)
 {
   return new Promise
   (
-    (resolve) =>
+    (resolve, reject) =>
     {
         fs.readFile('.' + path,
         (err, data) =>
         {
-          if (err) throw err;
+          if (err) reject(err);
           console.log(`3 - ${typeof data}`);
           resolve(data);
         });
@@ -60,19 +60,19 @@ app.use(
 {
   var path = ctx.request.path;
 
-  if(path === '/')
+
+  console.log(`2 - .${path}`);
+  try
   {
-    ctx.body = fs.readFileSync('stol2.html', 'utf8');
-  }
-  else
-  {
-    console.log(`2 - .${path}`);
     var data_b = await read_file(path);
     console.log(`4 - ${typeof data_b}`);
-
     ctx.type = type_of_file(path);
     ctx.body = data_b;
     console.log(`5 - ${ctx.type}`);
+  }catch (e)
+  {
+    ctx.type = "text/html; charset=UTF-8";
+    ctx.body = fs.readFileSync('stol2.html', 'utf8');
   }
 });
 
