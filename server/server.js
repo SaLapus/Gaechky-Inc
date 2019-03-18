@@ -26,7 +26,7 @@ function read_file(path)
   (
     (resolve, reject) =>
     {
-        fs.readFile('.' + path,
+        fs.readFile(path,
         (err, data) =>
         {
           if (err) reject(err);
@@ -61,24 +61,34 @@ app.use(
   {
     var path = ctx.request.path;
 
-    switch()
+    if(path === '/main' || path === '/')
     {
-
-      console.log(`2 - .${path}`);
+      ctx.type = 'text/html; charset=UTF-8';
       try
       {
-        var data_b = await read_file(path);
+        ctx.body = await read_file('file_path/stolovaya.html');
+      }
+      catch (e)
+      {
+        ctx.body = await read_file('file_path/404Error.html');
+      }
+    }
+    else
+    {
+      console.log(`2 - ${path}`);
+      try
+      {
+        var data_b = await read_file('file_path' + path);
         console.log(`4 - ${typeof data_b}`);
         ctx.type = type_of_file(path);
         ctx.body = data_b;
         console.log(`5 - ${ctx.type}`);
       }
-      catch (e)
+      catch(e)
       {
-        ctx.type = "text/html; charset=UTF-8";
-        ctx.body = fs.readFileSync('stol2.html', 'utf8');
+        console.error(e);
       }
-  }
+    }
 });
 
 app.listen(3000);
