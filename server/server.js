@@ -44,6 +44,7 @@ function type_of_file(path)
     case "html":
     case "htm": type = "text/html; charset=UTF-8"; break;
     case "js": type = "application/Ja­va­Script;charset=UTF-8"; break;
+    case "json": type = "application/json; charset=UTF-8"; break;
     case "css": type = "text/css; charset=UTF-8"; break;
     case "txt" : type = "text/plain; charset=UTF-8"; break;
     case "jpg" : type = "image/jpeg"; break;
@@ -57,22 +58,26 @@ function type_of_file(path)
 
 app.use(
   async ctx =>
-{
-  var path = ctx.request.path;
-
-
-  console.log(`2 - .${path}`);
-  try
   {
-    var data_b = await read_file(path);
-    console.log(`4 - ${typeof data_b}`);
-    ctx.type = type_of_file(path);
-    ctx.body = data_b;
-    console.log(`5 - ${ctx.type}`);
-  }catch (e)
-  {
-    ctx.type = "text/html; charset=UTF-8";
-    ctx.body = fs.readFileSync('stol2.html', 'utf8');
+    var path = ctx.request.path;
+
+    switch()
+    {
+
+      console.log(`2 - .${path}`);
+      try
+      {
+        var data_b = await read_file(path);
+        console.log(`4 - ${typeof data_b}`);
+        ctx.type = type_of_file(path);
+        ctx.body = data_b;
+        console.log(`5 - ${ctx.type}`);
+      }
+      catch (e)
+      {
+        ctx.type = "text/html; charset=UTF-8";
+        ctx.body = fs.readFileSync('stol2.html', 'utf8');
+      }
   }
 });
 
